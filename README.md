@@ -73,11 +73,12 @@ The application minimizes repeated requests for the same city within a 1-hour wi
 Typical flow:
 1. Request comes for a city
 2. Check Redis cache
-3. If missing, acquire a lock for that city
-4. Check if a fresh snapshot already exists in the database
-5. If not, fetch from third-party provider
-6. Persist snapshot in MariaDB
-7. Cache final report in Redis
+3. Check if a fresh snapshot already exists in the database
+4. If missing, acquire a lock for that city
+5. Check for a fresh snapshot again to avoid race conditions
+6. If not, fetch from a third-party provider
+7. Persist snapshot in MariaDB
+8. Cache final report in Redis
 
 This prevents unnecessary repeated network calls when multiple clients request the same city close in time.
 
