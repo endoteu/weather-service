@@ -1,0 +1,4 @@
+framework:
+    cache:
+        default_redis_provider: '%env(REDIS_DSN)%'
+        app: cache.adapter.redis

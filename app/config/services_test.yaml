@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    App\Features\Bootstrap\FeatureContext: ~
+
+    App\Weather\Infrastructure\ThirdParty\FakeWeatherProvider: ~
+
+    App\Weather\Infrastructure\ThirdParty\WeatherProviderInterface:
+        alias: App\Weather\Infrastructure\ThirdParty\FakeWeatherProvider
+        public: true
