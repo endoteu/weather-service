@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Web;
+namespace App\Weather\Domain\Port\Web;
 
+use App\Weather\Application\Contract\WeatherQueryInterface;
 use App\Weather\Application\Exception\CityNotFound;
-use App\Weather\Application\GetWeatherByCity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class WeatherPageController extends AbstractController
+final class WeatherPagePort extends AbstractController
 {
     #[Route('/', name: 'weather_page', methods: ['GET', 'POST'])]
-    public function __invoke(Request $request, GetWeatherByCity $getWeatherByCity): Response
+    public function __invoke(Request $request, WeatherQueryInterface $weatherQuery): Response
     {
         $city = '';
         $report = null;
@@ -27,7 +27,7 @@ final class WeatherPageController extends AbstractController
                 $error = 'Please enter a city.';
             } else {
                 try {
-                    $report = $getWeatherByCity->handle($city);
+                    $report = $weatherQuery->getByCity($city);
                 } catch (CityNotFound $exception) {
                     $error = $exception->getMessage();
                 }

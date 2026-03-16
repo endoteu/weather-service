@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Features\Bootstrap;
 
-use App\Weather\Application\GetWeatherByCity;
+use App\Weather\Application\Contract\WeatherQueryInterface;
 use App\Weather\Application\WeatherReport;
 use App\Weather\Domain\WeatherSnapshotRepositoryInterface;
 use App\Weather\Infrastructure\ThirdParty\FakeWeatherProvider;
@@ -16,7 +16,7 @@ final class FeatureContext implements Context
     private ?WeatherReport $report = null;
 
     public function __construct(
-        private readonly GetWeatherByCity $getWeatherByCity,
+        private readonly WeatherQueryInterface $weatherQuery,
         private readonly FakeWeatherProvider $fakeWeatherProvider,
         private readonly WeatherSnapshotRepositoryInterface $repository,
         private readonly CacheInterface $cache,
@@ -45,7 +45,7 @@ final class FeatureContext implements Context
      */
     public function iRequestTheWeatherFor(string $city): void
     {
-        $this->report = $this->getWeatherByCity->handle($city);
+        $this->report = $this->weatherQuery->getByCity($city);
     }
 
     /**
@@ -53,8 +53,8 @@ final class FeatureContext implements Context
      */
     public function iRequestTheWeatherForTwice(string $city): void
     {
-        $this->report = $this->getWeatherByCity->handle($city);
-        $this->report = $this->getWeatherByCity->handle($city);
+        $this->report = $this->weatherQuery->getByCity($city);
+        $this->report = $this->weatherQuery->getByCity($city);
     }
 
     /**

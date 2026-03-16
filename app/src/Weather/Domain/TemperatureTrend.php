@@ -18,4 +18,19 @@ enum TemperatureTrend: string
             self::Static => '-',
         };
     }
+
+    public static function fromTemperatures(float $currentTemperature, float $averageTemperature): self
+    {
+        $difference = round($currentTemperature - $averageTemperature, 2);
+
+        if ($difference > 0.0) {
+            return self::Positive;
+        }
+
+        if ($difference < 0.0) {
+            return self::Negative;
+        }
+
+        return self::Static;
+    }
 }
